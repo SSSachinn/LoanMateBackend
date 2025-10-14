@@ -78,15 +78,17 @@ namespace LoanManagementSystem
             });
 
 
-           builder.Services.AddCors(options =>
+builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://loanmatez.netlify.app")
+        policy.WithOrigins("https://loanmatez.netlify.app", "http://loanmatez.netlify.app")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
+
 
 
             builder.Services.AddControllers().AddJsonOptions(options =>
@@ -129,6 +131,8 @@ namespace LoanManagementSystem
             var app = builder.Build();
 
 
+            app.UseCors("AllowFrontend");
+            
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -141,7 +145,7 @@ namespace LoanManagementSystem
             }
             app.UseHttpsRedirection();
             
-            app.UseCors("AllowFrontend");
+            
             
             app.UseAuthentication();
             
