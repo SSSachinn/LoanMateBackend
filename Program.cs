@@ -78,16 +78,15 @@ namespace LoanManagementSystem
             });
 
 
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAngularClient",
-                    policy =>
-                    {
-                        policy.WithOrigins("http://localhost:4200")
-                              .AllowAnyHeader()
-                              .AllowAnyMethod();
-                    });
-            });
+           builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://loanmatez.netlify.app")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 
             builder.Services.AddControllers().AddJsonOptions(options =>
@@ -140,7 +139,7 @@ namespace LoanManagementSystem
                     options.EnablePersistAuthorization();
                 });
             }
-            app.UseCors("AllowAngularClient");
+            app.UseCors("AllowFrontend");
             app.UseAuthentication();
             app.UseHttpsRedirection();
 
