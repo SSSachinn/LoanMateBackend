@@ -139,9 +139,12 @@ namespace LoanManagementSystem
                     options.EnablePersistAuthorization();
                 });
             }
-            app.UseCors("AllowFrontend");
-            app.UseAuthentication();
             app.UseHttpsRedirection();
+            
+            app.UseCors("AllowFrontend");
+            
+            app.UseAuthentication();
+            
 
             app.UseAuthorization();
 
