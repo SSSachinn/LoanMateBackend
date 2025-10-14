@@ -78,14 +78,26 @@ namespace LoanManagementSystem
             });
 
 
-builder.Services.AddCors(options =>
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("AllowFrontend", policy =>
+//     {
+//         policy.WithOrigins("https://loanmatez.netlify.app", "http://loanmatez.netlify.app")
+//               .AllowAnyHeader()
+//               .AllowAnyMethod()
+//               .AllowCredentials();
+//     });
+// });
+
+            builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://loanmatez.netlify.app", "http://loanmatez.netlify.app")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy
+            .SetIsOriginAllowed(origin => true) 
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
