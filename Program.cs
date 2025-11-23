@@ -18,8 +18,30 @@ namespace LoanManagementSystem
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddDbContext<LoanManagementSystemContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDbConnection")).UseLazyLoadingProxies());
+            //builder.Services.AddDbContext<LoanManagementSystemContext>(options =>
+                //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDbConnection")).UseLazyLoadingProxies());
+
+            var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<LoanManagementSystemContext>(options =>
+{
+    var connStr = builder.Configuration.GetConnectionString("DefaultDbConnection");
+
+    options.UseSqlServer(connStr, sqlOptions =>
+    {
+        // 💡 Railway SQL takes time to wake up
+        sqlOptions.CommandTimeout(60); // seconds
+
+        // 💡 Retry handshake failures & network issues
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(5),
+            errorNumbersToAdd: null
+        );
+    })
+    .UseLazyLoadingProxies(); // keep your existing lazy loading
+});
+
 
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
@@ -45,8 +67,8 @@ namespace LoanManagementSystem
             builder.Services.AddScoped<INpaService, NpaService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
 
-            builder.Services.AddHostedService<RepaymentReminder>();     //BackGround Service
-            builder.Services.AddHostedService<OverdueRepaymentChecker>();
+            //builder.Services.AddHostedService<RepaymentReminder>();     //BackGround Service
+            //builder.Services.AddHostedService<OverdueRepaymentChecker>();
 
 
 
