@@ -93,13 +93,16 @@ namespace LoanManagementSystem
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy
-            .SetIsOriginAllowed(origin => true) 
+        policy.WithOrigins(
+                "https://loanmatez.netlify.app",
+                "http://localhost:4200"     // for Angular dev
+            )
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
     });
 });
+
 
 
 
