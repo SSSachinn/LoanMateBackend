@@ -146,7 +146,7 @@ namespace LoanManagementSystem
             var app = builder.Build();
 
 
-            app.UseCors("AllowFrontend");
+            
             
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -159,7 +159,8 @@ namespace LoanManagementSystem
                 });
             }
             app.UseHttpsRedirection();
-            
+
+            app.UseCors("AllowFrontend");
             
             
             app.UseAuthentication();
